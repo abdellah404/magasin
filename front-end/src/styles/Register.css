@@ -1,0 +1,24 @@
+/* Register utilise les mêmes styles que Login */
+/* On importe juste le fichier Login.css */
+@import './Login.css';
+
+/* Carte plus large pour le register car plus de champs */
+.register-card {
+  max-width: 520px;
+}
+
+/* Ligne avec deux champs côte à côte */
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Étoile rouge sur les champs obligatoires */
+.required {
+  color: var(--danger);
+  margin-left: 2px;
+}

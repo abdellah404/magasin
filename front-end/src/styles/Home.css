@@ -1,0 +1,117 @@
+/* ===== PAGE ===== */
+.home-page {
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ===== NAVBAR ===== */
+.home-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 60px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.home-navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.home-logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.home-shopname {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.home-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.home-welcome {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.home-logout-btn {
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--danger);
+  border: 1.5px solid var(--danger);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.home-logout-btn:hover {
+  background: var(--danger);
+  color: var(--white);
+}
+
+/* ===== CONTENU ===== */
+.home-content {
+  padding: 40px 32px;
+}
+
+.home-content h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.home-content p {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+/* ===== CARTES ===== */
+.home-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.home-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 130px;
+}
+
+.home-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 16px rgba(37,99,235,0.12);
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  font-size: 32px;
+}
+
+.card-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
