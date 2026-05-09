@@ -23,7 +23,7 @@ function Login() {
         localStorage.setItem('token',    data.token)
         localStorage.setItem('prenom',   data.prenom)
         localStorage.setItem('shopName', data.shopName)
-        navigate('/dashboard')
+        navigate('/credits')
       } else {
         setError(data.error || 'Email ou mot de passe incorrect')
       }

@@ -2,12 +2,12 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import '../styles/Layout.css'
 
 const titles = {
-  '/dashboard':    'Tableau de bord',
-  '/ventes':       'Ventes',
   '/credits':      'Crédits en cours',
+  '/ventes':       'Ventes',
   '/produits':     'Produits & Stock',
   '/clients':      'Clients',
   '/fournisseurs': 'Fournisseurs',
+  '/livraisons':   'Livraisons',
   '/parametres':   'Paramètres',
 }
 
@@ -30,28 +30,26 @@ function Layout({ children }) {
   return (
     <div className="app">
 
-      {/* SIDEBAR */}
+      {/* ===== SIDEBAR ===== */}
       <aside className="sidebar">
 
         <div className="logo">
           <div className="logo-icon">🏪</div>
           <div>
-            <div className="logo-text">Dukan</div>
+            <div className="logo-text">TrackSales</div>
             <div className="logo-sub">Gestion Magasin</div>
           </div>
         </div>
 
         <nav className="nav">
+
           <div className="nav-section">
             <div className="nav-label">Principal</div>
-            <div className={isActive('/dashboard')} onClick={() => navigate('/dashboard')}>
-              <span className="nav-icon">📊</span> Tableau de bord
+            <div className={isActive('/credits')} onClick={() => navigate('/credits')}>
+              <span className="nav-icon">💳</span> Crédits
             </div>
             <div className={isActive('/ventes')} onClick={() => navigate('/ventes')}>
               <span className="nav-icon">🛍️</span> Ventes
-            </div>
-            <div className={isActive('/credits')} onClick={() => navigate('/credits')}>
-              <span className="nav-icon">💳</span> Crédits
             </div>
           </div>
 
@@ -66,6 +64,9 @@ function Layout({ children }) {
             <div className={isActive('/fournisseurs')} onClick={() => navigate('/fournisseurs')}>
               <span className="nav-icon">🏭</span> Fournisseurs
             </div>
+            <div className={isActive('/livraisons')} onClick={() => navigate('/livraisons')}>
+              <span className="nav-icon">🚚</span> Livraisons
+            </div>
           </div>
 
           <div className="nav-section">
@@ -74,6 +75,7 @@ function Layout({ children }) {
               <span className="nav-icon">💾</span> Paramètres
             </div>
           </div>
+
         </nav>
 
         <div className="sidebar-footer">
@@ -84,7 +86,7 @@ function Layout({ children }) {
 
       </aside>
 
-      {/* MAIN */}
+      {/* ===== MAIN ===== */}
       <main className="main">
         <header className="topbar">
           <div className="topbar-title">{titles[location.pathname] || 'Dukan'}</div>
