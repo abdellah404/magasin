@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import * as mysql from 'mysql2/promise';
+import * as mysql from 'mysql2/promise';//mariadb ? => 
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {
@@ -8,8 +8,8 @@ export class DatabaseService implements OnModuleInit {
     this.connection = await mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: '',
-      database: 'Magasin_db',
+      password: '1516',
+      database: 'magasin_db',
     });
     console.log(' MySQL connecté');
   }

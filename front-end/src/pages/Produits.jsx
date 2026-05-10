@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import AjouterProduitPopup from '../components/produits/AjouterProduitPopup'
+import ModifierProduitPopup from '../components/produits/ModifierProduitPopup'
 import '../styles/Clients.css'
 
 const unites = ['Sac', 'Bidon', 'Boîte', 'Kg', 'Litre', 'Pièce', 'Carton', 'Bouteille']
@@ -110,11 +112,11 @@ function Produits() {
       {/* Header */}
       <div className="page-header">
         <div>
-          <div className="page-h1">📦 Produits & Stock</div>
+          <div className="page-h1"><i className="fas fa-box"></i> Produits & Stock</div>
           <div className="page-desc">Gérez votre inventaire</div>
         </div>
         <button className="btn btn-primary" onClick={() => ouvrirModal()}>
-          ＋ Nouveau produit
+          <i className="fas fa-plus"></i> Nouveau produit
         </button>
       </div>
 
@@ -143,7 +145,7 @@ function Produits() {
       {/* Alerte stock bas */}
       {stockBas > 0 && (
         <div className="alert alert-amber mb-14">
-          <div className="alert-icon">⚠️</div>
+          <div className="alert-icon"><i className="fas fa-exclamation-triangle"></i></div>
           <div>
             <div className="alert-title">{stockBas} produit(s) en stock bas</div>
             <div className="alert-text">Pensez à réapprovisionner ces articles</div>
@@ -159,12 +161,12 @@ function Produits() {
         <div className="card-body table-pad">
           {loading ? (
             <div className="empty">
-              <div className="empty-icon">⏳</div>
+              <div className="empty-icon"><i className="fas fa-spinner"></i></div>
               <div className="empty-text">Chargement...</div>
             </div>
           ) : produits.length === 0 ? (
             <div className="empty">
-              <div className="empty-icon">📦</div>
+              <div className="empty-icon"><i className="fas fa-box"></i></div>
               <div className="empty-text">Aucun produit pour l'instant</div>
               <div className="empty-sub">Ajoutez votre premier produit</div>
             </div>
@@ -203,16 +205,16 @@ function Produits() {
                       </td>
                       <td>
                         {p.seuil_alerte > 0 && p.stock <= p.seuil_alerte
-                          ? <span className="badge badge-red">⚠️ Stock bas</span>
-                          : <span className="badge badge-green">✓ OK</span>
+                          ? <span className="badge badge-red"><i className="fas fa-exclamation-triangle"></i> Stock bas</span>
+                          : <span className="badge badge-green"><i className="fas fa-check"></i> OK</span>
                         }
                       </td>
                       <td>
                         <div className="flex gap-8">
                           <button className="btn btn-secondary btn-xs"
-                            onClick={() => ouvrirModal(p)}>✏️</button>
+                            onClick={() => ouvrirModal(p)}><i className="fas fa-pen"></i></button>
                           <button className="btn btn-danger btn-xs"
-                            onClick={() => supprimerProduit(p.id)}>🗑</button>
+                            onClick={() => supprimerProduit(p.id)}><i className="fas fa-trash"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -225,86 +227,28 @@ function Produits() {
       </div>
 
       {/* Modal */}
-      {modalOpen && (
-        <div className="modal-overlay open">
-          <div className="modal">
-            <div className="modal-header">
-              <div className="modal-title">
-                {editProduit ? '✏️ Modifier produit' : '📦 Nouveau produit'}
-              </div>
-              <button className="modal-close" onClick={fermerModal}>✕</button>
-            </div>
-            <div className="modal-body">
+      {modalOpen && !editProduit && (
+        <AjouterProduitPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          unites={unites}
+          fournisseurs={fournisseurs}
+          fermerModal={fermerModal}
+          enregistrerProduit={enregistrerProduit}
+        />
+      )}
 
-              {error && <div className="auth-error mb-14">{error}</div>}
-
-              {/* Nom */}
-              <div className="form-group mb-14">
-                <label className="form-label">Nom du produit *</label>
-                <input className="form-input" placeholder="Ex : Farine 25kg"
-                  value={form.nom}
-                  onChange={e => setForm({ ...form, nom: e.target.value })} />
-              </div>
-
-              {/* Prix + Stock + Seuil */}
-              <div className="form-grid form-grid-3 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Prix (MAD) *</label>
-                  <input className="form-input" type="number" min="0" placeholder="0.00"
-                    value={form.prix_unitaire}
-                    onChange={e => setForm({ ...form, prix_unitaire: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Stock</label>
-                  <input className="form-input" type="number" min="0" placeholder="0"
-                    value={form.stock}
-                    onChange={e => setForm({ ...form, stock: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Seuil alerte</label>
-                  <input className="form-input" type="number" min="0" placeholder="0"
-                    value={form.seuil_alerte}
-                    onChange={e => setForm({ ...form, seuil_alerte: e.target.value })} />
-                </div>
-              </div>
-
-              {/* Unité + Fournisseur */}
-              <div className="form-grid form-grid-2 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Unité *</label>
-                  <select className="form-select" value={form.unite}
-                    onChange={e => setForm({ ...form, unite: e.target.value })}>
-                    {unites.map(u => <option key={u}>{u}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Fournisseur</label>
-                  <select className="form-select" value={form.fournisseur_id}
-                    onChange={e => setForm({ ...form, fournisseur_id: e.target.value })}>
-                    <option value="">-- Aucun --</option>
-                    {fournisseurs.map(f => (
-                      <option key={f.id} value={f.id}>{f.nom}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Description */}
-              <div className="form-group">
-                <label className="form-label">Description (optionnel)</label>
-                <textarea className="form-textarea"
-                  placeholder="Notes sur le produit..."
-                  value={form.description}
-                  onChange={e => setForm({ ...form, description: e.target.value })} />
-              </div>
-
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={fermerModal}>Annuler</button>
-              <button className="btn btn-primary"   onClick={enregistrerProduit}>✅ Enregistrer</button>
-            </div>
-          </div>
-        </div>
+      {modalOpen && editProduit && (
+        <ModifierProduitPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          unites={unites}
+          fournisseurs={fournisseurs}
+          fermerModal={fermerModal}
+          enregistrerProduit={enregistrerProduit}
+        />
       )}
 
     </div>

@@ -68,7 +68,7 @@ function Parametres() {
       if (data.error) {
         setError(data.error)
       } else {
-        setSuccess('Informations mises à jour ✅')
+        setSuccess('Informations mises à jour')
         // Mettre à jour localStorage
         localStorage.setItem('prenom',   form.prenom)
         localStorage.setItem('shopName', form.shop_name)
@@ -106,7 +106,7 @@ function Parametres() {
       if (data.error) {
         setError(data.error)
       } else {
-        setSuccess('Mot de passe changé ✅')
+        setSuccess('Mot de passe changé')
         setFormPwd({ ancien_password: '', nouveau_password: '' })
       }
     } catch {
@@ -116,7 +116,7 @@ function Parametres() {
 
   if (loading) return (
     <div className="empty" style={{ marginTop: 60 }}>
-      <div className="empty-icon">⏳</div>
+      <div className="empty-icon"><i className="fas fa-spinner"></i></div>
       <div className="empty-text">Chargement...</div>
     </div>
   )
@@ -127,7 +127,7 @@ function Parametres() {
       {/* ===== HEADER ===== */}
       <div className="page-header">
         <div>
-          <div className="page-h1">💾 Paramètres</div>
+          <div className="page-h1"><i className="fas fa-cog"></i> Paramètres</div>
           <div className="page-desc">Gérez les informations de votre compte</div>
         </div>
       </div>
@@ -139,7 +139,7 @@ function Parametres() {
       {/* ===== SECTION INFOS MAGASIN ===== */}
       <div className="card mb-14">
         <div className="card-header">
-          <div className="card-title">🏪 Informations du magasin</div>
+          <div className="card-title"><i className="fas fa-store"></i> Informations du magasin</div>
         </div>
         <div className="card-body">
 
@@ -177,7 +177,7 @@ function Parametres() {
           </div>
 
           <button className="btn btn-primary" onClick={enregistrerInfos}>
-            💾 Enregistrer les informations
+            <i className="fas fa-save"></i> Enregistrer les informations
           </button>
 
         </div>
@@ -186,7 +186,7 @@ function Parametres() {
       {/* ===== SECTION MOT DE PASSE ===== */}
       <div className="card">
         <div className="card-header">
-          <div className="card-title">🔐 Changer le mot de passe</div>
+          <div className="card-title"><i className="fas fa-lock"></i> Changer le mot de passe</div>
         </div>
         <div className="card-body">
 
@@ -205,7 +205,7 @@ function Parametres() {
           </div>
 
           <button className="btn btn-primary" onClick={changerMotDePasse}>
-            🔐 Changer le mot de passe
+            <i className="fas fa-lock"></i> Changer le mot de passe
           </button>
 
         </div>

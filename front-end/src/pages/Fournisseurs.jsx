@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import AjouterFournisseurPopup from '../components/fournisseurs/AjouterFournisseurPopup'
+import ModifierFournisseurPopup from '../components/fournisseurs/ModifierFournisseurPopup'
 import '../styles/Clients.css'
 
 const villes = [
@@ -91,11 +93,11 @@ function Fournisseurs() {
       {/* Header */}
       <div className="page-header">
         <div>
-          <div className="page-h1">🏭 Fournisseurs</div>
+          <div className="page-h1"><i className="fas fa-industry"></i> Fournisseurs</div>
           <div className="page-desc">Gérez vos partenaires</div>
         </div>
         <button className="btn btn-primary" onClick={() => ouvrirModal()}>
-          ＋ Nouveau fournisseur
+          <i className="fas fa-plus"></i> Nouveau fournisseur
         </button>
       </div>
 
@@ -129,12 +131,12 @@ function Fournisseurs() {
         <div className="card-body table-pad">
           {loading ? (
             <div className="empty">
-              <div className="empty-icon">⏳</div>
+              <div className="empty-icon"><i className="fas fa-spinner"></i></div>
               <div className="empty-text">Chargement...</div>
             </div>
           ) : fournisseurs.length === 0 ? (
             <div className="empty">
-              <div className="empty-icon">🏭</div>
+              <div className="empty-icon"><i className="fas fa-industry"></i></div>
               <div className="empty-text">Aucun fournisseur pour l'instant</div>
               <div className="empty-sub">Ajoutez votre premier fournisseur</div>
             </div>
@@ -163,15 +165,15 @@ function Fournisseurs() {
                           ? <span className="text-mono text-red fw-bold">
                               {parseFloat(f.total_dette).toFixed(2)} MAD
                             </span>
-                          : <span className="text-muted">Soldé ✅</span>
+                          : <span className="text-muted">Soldé <i className="fas fa-check"></i></span>
                         }
                       </td>
                       <td>
                         <div className="flex gap-8">
                           <button className="btn btn-secondary btn-xs"
-                            onClick={() => ouvrirModal(f)}>✏️</button>
+                            onClick={() => ouvrirModal(f)}><i className="fas fa-pen"></i></button>
                           <button className="btn btn-danger btn-xs"
-                            onClick={() => supprimerFourn(f.id)}>🗑</button>
+                            onClick={() => supprimerFourn(f.id)}><i className="fas fa-trash"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -184,65 +186,26 @@ function Fournisseurs() {
       </div>
 
       {/* Modal */}
-      {modalOpen && (
-        <div className="modal-overlay open">
-          <div className="modal">
-            <div className="modal-header">
-              <div className="modal-title">
-                {editFourn ? '✏️ Modifier fournisseur' : '🏭 Nouveau fournisseur'}
-              </div>
-              <button className="modal-close" onClick={fermerModal}>✕</button>
-            </div>
-            <div className="modal-body">
+      {modalOpen && !editFourn && (
+        <AjouterFournisseurPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          villes={villes}
+          fermerModal={fermerModal}
+          enregistrerFourn={enregistrerFourn}
+        />
+      )}
 
-              {error && <div className="auth-error mb-14">{error}</div>}
-
-              <div className="form-group mb-14">
-                <label className="form-label">Nom *</label>
-                <input className="form-input" placeholder="Ex : Société Atlas"
-                  value={form.nom}
-                  onChange={e => setForm({ ...form, nom: e.target.value })} />
-              </div>
-
-              <div className="form-grid form-grid-2 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Ville</label>
-                  <select className="form-select" value={form.ville}
-                    onChange={e => setForm({ ...form, ville: e.target.value })}>
-                    {villes.map(v => <option key={v}>{v}</option>)}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Téléphone</label>
-                  <input className="form-input" placeholder="+212 5XX XXX XXX"
-                    value={form.tel}
-                    onChange={e => setForm({ ...form, tel: e.target.value })} />
-                </div>
-              </div>
-
-              <div className="form-group mb-14">
-                <label className="form-label">Email</label>
-                <input className="form-input" type="email"
-                  placeholder="contact@fournisseur.ma"
-                  value={form.email}
-                  onChange={e => setForm({ ...form, email: e.target.value })} />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Notes (optionnel)</label>
-                <textarea className="form-textarea"
-                  placeholder="Conditions de paiement, délais livraison..."
-                  value={form.notes}
-                  onChange={e => setForm({ ...form, notes: e.target.value })} />
-              </div>
-
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={fermerModal}>Annuler</button>
-              <button className="btn btn-primary"   onClick={enregistrerFourn}>✅ Enregistrer</button>
-            </div>
-          </div>
-        </div>
+      {modalOpen && editFourn && (
+        <ModifierFournisseurPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          villes={villes}
+          fermerModal={fermerModal}
+          enregistrerFourn={enregistrerFourn}
+        />
       )}
 
     </div>

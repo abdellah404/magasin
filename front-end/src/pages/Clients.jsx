@@ -1,4 +1,6 @@
 import { useState , useEffect} from 'react'
+import AjouterClientPopup from '../components/clients/AjouterClientPopup'
+import ModifierClientPopup from '../components/clients/ModifierClientPopup'
 import '../styles/Clients.css'
 
 function Clients() {
@@ -92,11 +94,11 @@ function Clients() {
 
       <div className="page-header">
         <div>
-          <div className="page-h1">👥 Clients</div>
+          <div className="page-h1"><i className="fas fa-users"></i> Clients</div>
           <div className="page-desc">Carnet de clients</div>
         </div>
         <button className="btn btn-primary" onClick={() => ouvrirModal()}>
-          ＋ Nouveau client
+          <i className="fas fa-plus"></i> Nouveau client
         </button>
       </div>
 
@@ -121,13 +123,6 @@ function Clients() {
         </div>
       </div>
 
-
-
-
-
-
-
-
       <div className="card">
         <div className="card-header">
           <div className="card-title">Liste des clients</div>
@@ -135,12 +130,12 @@ function Clients() {
         <div className="card-body table-pad">
           {loading ? (
             <div className="empty">
-              <div className="empty-icon">⏳</div>
+              <div className="empty-icon"><i className="fas fa-spinner"></i></div>
               <div className="empty-text">Chargement...</div>
             </div>
           ) : clients.length === 0 ? (
             <div className="empty">
-              <div className="empty-icon">👥</div>
+              <div className="empty-icon"><i className="fas fa-users"></i></div>
               <div className="empty-text">Aucun client pour l'instant</div>
               <div className="empty-sub">Ajoutez votre premier client</div>
             </div>
@@ -167,15 +162,15 @@ function Clients() {
                           ? <span className="text-mono text-red fw-bold">
                               {parseFloat(c.total_credit).toFixed(2)} MAD
                             </span>
-                          : <span className="text-muted">Soldé ✅</span>
+                          : <span className="text-muted">Soldé <i className="fas fa-check"></i></span>
                         }
                       </td>
                       <td>
                         <div className="flex gap-8">
                           <button className="btn btn-secondary btn-xs"
-                            onClick={() => ouvrirModal(c)}>✏️</button>
+                            onClick={() => ouvrirModal(c)}><i className="fas fa-pen"></i></button>
                           <button className="btn btn-danger btn-xs"
-                            onClick={() => supprimerClient(c.id)}>🗑</button>
+                            onClick={() => supprimerClient(c.id)}><i className="fas fa-trash"></i></button>
                         </div>
                       </td>
                     </tr>
@@ -187,72 +182,24 @@ function Clients() {
         </div>
       </div>
 
+      {modalOpen && !editClient && (
+        <AjouterClientPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          fermerModal={fermerModal}
+          enregistrerClient={enregistrerClient}
+        />
+      )}
 
-
-
-
-
-
-
-
-
-
-      {modalOpen && (
-        <div className="modal-overlay open">
-          <div className="modal">
-            <div className="modal-header">
-              <div className="modal-title">
-                {editClient ? '✏️ Modifier client' : '👤 Nouveau client'}
-              </div>
-              <button className="modal-close" onClick={fermerModal}>✕</button>
-            </div>
-            <div className="modal-body">
-
-              {error && <div className="auth-error mb-14">{error}</div>}
-
-              <div className="form-grid form-grid-2 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Prénom</label>
-                  <input className="form-input" placeholder="Ahmed"
-                    value={form.prenom}
-                    onChange={e => setForm({ ...form, prenom: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Nom</label>
-                  <input className="form-input" placeholder="Benali"
-                    value={form.nom}
-                    onChange={e => setForm({ ...form, nom: e.target.value })} />
-                </div>
-              </div>
-
-              <div className="form-group mb-14">
-                <label className="form-label">Téléphone</label>
-                <input className="form-input" placeholder="+212 6XX XXX XXX"
-                  value={form.tel}
-                  onChange={e => setForm({ ...form, tel: e.target.value })} />
-              </div>
-
-              <div className="form-group mb-14">
-                <label className="form-label">Ville / Quartier (optionnel)</label>
-                <input className="form-input" placeholder="Ex: Hay Mohammadi..."
-                  value={form.adresse}
-                  onChange={e => setForm({ ...form, adresse: e.target.value })} />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Limite crédit (MAD)</label>
-                <input className="form-input" type="number" min="0"
-                  value={form.limite_credit}
-                  onChange={e => setForm({ ...form, limite_credit: e.target.value })} />
-              </div>
-
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={fermerModal}>Annuler</button>
-              <button className="btn btn-primary"   onClick={enregistrerClient}>✅ Enregistrer</button>
-            </div>
-          </div>
-        </div>
+      {modalOpen && editClient && (
+        <ModifierClientPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          fermerModal={fermerModal}
+          enregistrerClient={enregistrerClient}
+        />
       )}
 
     </div>

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import PayerClientPopup from '../components/credits/PayerClientPopup'
+import PayerFournisseurPopup from '../components/credits/PayerFournisseurPopup'
 import '../styles/Clients.css'
 import '../styles/Credits.css'
 
@@ -88,8 +90,8 @@ function Credits() {
   // ===== BADGE STATUT =====
   const badgeStatut = (j) => {
     if (j === null) return <span className="badge badge-blue">En cours</span>
-    if (j < 0)      return <span className="badge badge-red">🚨 Retard</span>
-    if (j <= 7)     return <span className="badge badge-amber">⚠️ Urgent</span>
+    if (j < 0)      return <span className="badge badge-red"><i className="fas fa-exclamation-circle"></i> Retard</span>
+    if (j <= 7)     return <span className="badge badge-amber"><i className="fas fa-exclamation-triangle"></i> Urgent</span>
     return <span className="badge badge-blue">En cours</span>
   }
 
@@ -106,7 +108,7 @@ function Credits() {
       {/* ===== HEADER ===== */}
       <div className="page-header">
         <div>
-          <div className="page-h1">💳 Crédits en cours</div>
+          <div className="page-h1"><i className="fas fa-credit-card"></i> Crédits en cours</div>
           <div className="page-desc">Créances clients et dettes fournisseurs</div>
         </div>
       </div>
@@ -147,17 +149,17 @@ function Credits() {
       {/* ===== TABLE CREDITS CLIENTS ===== */}
       <div className="card mb-14">
         <div className="card-header">
-          <div className="card-title">👥 Créances clients — Montants à recevoir</div>
+          <div className="card-title"><i className="fas fa-users"></i> Créances clients — Montants à recevoir</div>
         </div>
         <div className="card-body table-pad">
           {loading ? (
             <div className="empty">
-              <div className="empty-icon">⏳</div>
+              <div className="empty-icon"><i className="fas fa-spinner"></i></div>
               <div className="empty-text">Chargement...</div>
             </div>
           ) : creditsClients.length === 0 ? (
             <div className="empty" style={{ padding: '30px' }}>
-              <div className="empty-icon">✅</div>
+              <div className="empty-icon"><i className="fas fa-check-circle"></i></div>
               <div className="empty-text">Aucun crédit client en cours</div>
             </div>
           ) : (
@@ -210,7 +212,7 @@ function Credits() {
                         <td>
                           <button className="btn btn-green btn-xs"
                             onClick={() => ouvrirPayerClient(v)}>
-                            💳 Payer
+                            <i className="fas fa-credit-card"></i> Payer
                           </button>
                         </td>
                       </tr>
@@ -226,17 +228,17 @@ function Credits() {
       {/* ===== TABLE DETTES FOURNISSEURS ===== */}
       <div className="card">
         <div className="card-header">
-          <div className="card-title">🏭 Dettes fournisseurs — Montants à payer</div>
+          <div className="card-title"><i className="fas fa-industry"></i> Dettes fournisseurs — Montants à payer</div>
         </div>
         <div className="card-body table-pad">
           {loading ? (
             <div className="empty">
-              <div className="empty-icon">⏳</div>
+              <div className="empty-icon"><i className="fas fa-spinner"></i></div>
               <div className="empty-text">Chargement...</div>
             </div>
           ) : dettesFourn.length === 0 ? (
             <div className="empty" style={{ padding: '30px' }}>
-              <div className="empty-icon">✅</div>
+              <div className="empty-icon"><i className="fas fa-check-circle"></i></div>
               <div className="empty-text">Aucune dette fournisseur</div>
             </div>
           ) : (
@@ -287,7 +289,7 @@ function Credits() {
                         <td>
                           <button className="btn btn-secondary btn-xs"
                             onClick={() => ouvrirPayerFourn(l)}>
-                            💳 Payer
+                            <i className="fas fa-credit-card"></i> Payer
                           </button>
                         </td>
                       </tr>
@@ -300,94 +302,26 @@ function Credits() {
         </div>
       </div>
 
-      {/* ===== MODAL PAYER CLIENT ===== */}
       {modalClientOpen && venteSelectee && (
-        <div className="modal-overlay open">
-          <div className="modal" style={{ maxWidth: '400px' }}>
-            <div className="modal-header">
-              <div className="modal-title">💳 Paiement client</div>
-              <button className="modal-close" onClick={() => setModalClientOpen(false)}>✕</button>
-            </div>
-            <div className="modal-body">
-
-              <div className="payer-info mb-14">
-                <div className="fw-bold mb-8">
-                  {venteSelectee.client_nom || 'Client comptoir'}
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted">Restant dû :</span>
-                  <span className="text-red fw-bold">
-                    {parseFloat(venteSelectee.credit).toFixed(2)} MAD
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-muted">Échéance :</span>
-                  <span>{fmtDate(venteSelectee.echeance)}</span>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Montant reçu (MAD)</label>
-                <input className="form-input" type="number" min="0"
-                  max={venteSelectee.credit}
-                  value={montantClient}
-                  onChange={e => setMontantClient(e.target.value)} />
-              </div>
-
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary"
-                onClick={() => setModalClientOpen(false)}>Annuler</button>
-              <button className="btn btn-green" onClick={payerClient}>
-                ✅ Enregistrer paiement
-              </button>
-            </div>
-          </div>
-        </div>
+        <PayerClientPopup
+          venteSelectee={venteSelectee}
+          montantClient={montantClient}
+          setMontantClient={setMontantClient}
+          setModalClientOpen={setModalClientOpen}
+          payerClient={payerClient}
+          fmtDate={fmtDate}
+        />
       )}
 
-      {/* ===== MODAL PAYER FOURNISSEUR ===== */}
       {modalFournOpen && livSelectee && (
-        <div className="modal-overlay open">
-          <div className="modal" style={{ maxWidth: '400px' }}>
-            <div className="modal-header">
-              <div className="modal-title">💳 Paiement fournisseur</div>
-              <button className="modal-close" onClick={() => setModalFournOpen(false)}>✕</button>
-            </div>
-            <div className="modal-body">
-
-              <div className="payer-info mb-14">
-                <div className="fw-bold mb-8">{livSelectee.fournisseur_nom}</div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted">Restant dû :</span>
-                  <span className="text-red fw-bold">
-                    {parseFloat(livSelectee.credit).toFixed(2)} MAD
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm mt-4">
-                  <span className="text-muted">Échéance :</span>
-                  <span>{fmtDate(livSelectee.echeance)}</span>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Montant payé (MAD)</label>
-                <input className="form-input" type="number" min="0"
-                  max={livSelectee.credit}
-                  value={montantFourn}
-                  onChange={e => setMontantFourn(e.target.value)} />
-              </div>
-
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary"
-                onClick={() => setModalFournOpen(false)}>Annuler</button>
-              <button className="btn btn-green" onClick={payerFourn}>
-                ✅ Enregistrer paiement
-              </button>
-            </div>
-          </div>
-        </div>
+        <PayerFournisseurPopup
+          livSelectee={livSelectee}
+          montantFourn={montantFourn}
+          setMontantFourn={setMontantFourn}
+          setModalFournOpen={setModalFournOpen}
+          payerFourn={payerFourn}
+          fmtDate={fmtDate}
+        />
       )}
 
     </div>

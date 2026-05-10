@@ -39,7 +39,7 @@ function Login() {
         <div className="auth-card">
 
           <div className="auth-logo">
-            <div className="auth-logo-icon">🏪</div>
+            <div className="auth-logo-icon"><i className="fas fa-store"></i></div>
             <div className="auth-logo-name">Dukan</div>
             <div className="auth-logo-sub">Gestion Magasin Maroc</div>
           </div>
@@ -64,7 +64,10 @@ function Login() {
 
           <button className="btn btn-primary w-full" style={{ padding: '11px' }}
             onClick={handleLogin} disabled={loading}>
-            {loading ? '⏳ Connexion...' : '🔐 Se connecter'}
+            {loading
+              ? <><i className="fas fa-spinner"></i> Connexion...</>
+              : <><i className="fas fa-lock"></i> Se connecter</>
+            }
           </button>
 
           <div className="auth-divider">ou</div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import AjouterLivraisonPopup from '../components/livraisons/AjouterLivraisonPopup'
 import '../styles/Clients.css'
 
 function Livraisons() {
@@ -142,11 +143,11 @@ function Livraisons() {
       {/* ===== HEADER ===== */}
       <div className="page-header">
         <div>
-          <div className="page-h1">🚚 Livraisons</div>
+          <div className="page-h1"><i className="fas fa-truck"></i> Livraisons</div>
           <div className="page-desc">Réceptions fournisseurs et gestion des dettes</div>
         </div>
         <button className="btn btn-primary" onClick={ouvrirModal}>
-          ＋ Nouvelle livraison
+          <i className="fas fa-plus"></i> Nouvelle livraison
         </button>
       </div>
 
@@ -188,12 +189,12 @@ function Livraisons() {
         <div className="card-body table-pad">
           {loading ? (
             <div className="empty">
-              <div className="empty-icon">⏳</div>
+              <div className="empty-icon"><i className="fas fa-spinner"></i></div>
               <div className="empty-text">Chargement...</div>
             </div>
           ) : livraisons.length === 0 ? (
             <div className="empty">
-              <div className="empty-icon">🚚</div>
+              <div className="empty-icon"><i className="fas fa-truck"></i></div>
               <div className="empty-text">Aucune livraison pour l'instant</div>
               <div className="empty-sub">Enregistrez votre première livraison</div>
             </div>
@@ -250,7 +251,7 @@ function Livraisons() {
                       </td>
                       <td>
                         <button className="btn btn-danger btn-xs"
-                          onClick={() => supprimerLivraison(l.id)}>🗑</button>
+                          onClick={() => supprimerLivraison(l.id)}><i className="fas fa-trash"></i></button>
                       </td>
                     </tr>
                   ))}
@@ -261,115 +262,18 @@ function Livraisons() {
         </div>
       </div>
 
-      {/* ===== MODAL NOUVELLE LIVRAISON ===== */}
       {modalOpen && (
-        <div className="modal-overlay open">
-          <div className="modal">
-            <div className="modal-header">
-              <div className="modal-title">📦 Nouvelle livraison</div>
-              <button className="modal-close" onClick={fermerModal}>✕</button>
-            </div>
-            <div className="modal-body">
-
-              {error && <div className="auth-error mb-14">{error}</div>}
-
-              {/* ===== SECTION : Fournisseur + Date ===== */}
-              <div className="form-grid form-grid-2 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Fournisseur *</label>
-                  <select className="form-select"
-                    value={form.fournisseur_id}
-                    onChange={e => setForm({ ...form, fournisseur_id: e.target.value })}>
-                    <option value="">-- Choisir --</option>
-                    {fournisseurs.map(f => (
-                      <option key={f.id} value={f.id}>{f.nom}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Date livraison *</label>
-                  <input className="form-input" type="date"
-                    value={form.date_livraison}
-                    onChange={e => setForm({ ...form, date_livraison: e.target.value })} />
-                </div>
-              </div>
-
-              {/* ===== SECTION : Produit ===== */}
-              <div className="form-group mb-14">
-                <label className="form-label">Produit livré *</label>
-                <select className="form-select"
-                  value={form.produit_id}
-                  onChange={e => setForm({ ...form, produit_id: e.target.value })}>
-                  <option value="">-- Choisir un produit --</option>
-                  {produits.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {p.nom} — stock actuel : {p.stock} {p.unite}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* ===== SECTION : Quantité + Prix ===== */}
-              <div className="form-grid form-grid-3 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Quantité reçue *</label>
-                  <input className="form-input" type="number" min="1"
-                    value={form.quantite}
-                    onChange={e => setForm({ ...form, quantite: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Prix unitaire (MAD) *</label>
-                  <input className="form-input" type="number" min="0" placeholder="0.00"
-                    value={form.prix_unitaire}
-                    onChange={e => setForm({ ...form, prix_unitaire: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Total</label>
-                  <input className="form-input" readOnly
-                    style={{ fontWeight: 700, color: 'var(--amber)' }}
-                    value={total > 0 ? `${total.toFixed(2)} MAD` : '—'} />
-                </div>
-              </div>
-
-              {/* ===== SECTION : Paiement ===== */}
-              <div className="form-grid form-grid-2 mb-14">
-                <div className="form-group">
-                  <label className="form-label">Payé maintenant (MAD)</label>
-                  <input className="form-input" type="number" min="0"
-                    value={form.montant_paye}
-                    onChange={e => setForm({ ...form, montant_paye: e.target.value })} />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Dette restante</label>
-                  <input className="form-input" readOnly
-                    style={{
-                      background:  credit > 0 ? 'var(--red-dim)'  : 'var(--green-dim)',
-                      color:       credit > 0 ? 'var(--red)'      : 'var(--green)',
-                      fontWeight:  700,
-                    }}
-                    value={credit > 0 ? `${credit.toFixed(2)} MAD` : 'Soldé ✅'} />
-                </div>
-              </div>
-
-              {/* ===== SECTION : Échéance — seulement si dette ===== */}
-              {credit > 0 && (
-                <div className="form-group">
-                  <label className="form-label">Échéance remboursement</label>
-                  <input className="form-input" type="date"
-                    value={form.echeance}
-                    onChange={e => setForm({ ...form, echeance: e.target.value })} />
-                </div>
-              )}
-
-            </div>
-            <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={fermerModal}>Annuler</button>
-              <button className="btn btn-primary"   onClick={enregistrerLivraison}>
-                ✅ Enregistrer la livraison
-              </button>
-            </div>
-          </div>
-        </div>
+        <AjouterLivraisonPopup
+          form={form}
+          setForm={setForm}
+          error={error}
+          fournisseurs={fournisseurs}
+          produits={produits}
+          total={total}
+          credit={credit}
+          fermerModal={fermerModal}
+          enregistrerLivraison={enregistrerLivraison}
+        />
       )}
 
     </div>

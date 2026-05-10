@@ -34,7 +34,7 @@ function Register() {
       })
       const data = await res.json()
       if (data.message) {
-        setSuccess('✅ Compte créé ! Redirection...')
+        setSuccess('Compte créé ! Redirection...')
         setTimeout(() => navigate('/login'), 2000)
       } else {
         setError(data.error || 'Une erreur est survenue')
@@ -51,7 +51,7 @@ function Register() {
         <div className="auth-card">
 
           <div className="auth-logo">
-            <div className="auth-logo-icon">🏪</div>
+            <div className="auth-logo-icon"><i className="fas fa-store"></i></div>
             <div className="auth-logo-name">Dukan</div>
             <div className="auth-logo-sub">Créer votre espace</div>
           </div>
@@ -102,7 +102,10 @@ function Register() {
 
           <button className="btn btn-primary w-full" style={{ padding: '11px' }}
             onClick={handleRegister} disabled={loading}>
-            {loading ? '⏳ Création...' : '✅ Créer mon compte'}
+            {loading
+              ? <><i className="fas fa-spinner"></i> Création...</>
+              : <><i className="fas fa-check"></i> Créer mon compte</>
+            }
           </button>
 
           <div className="auth-divider">ou</div>

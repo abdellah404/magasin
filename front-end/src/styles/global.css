@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Amiri:wght@400;700&display=swap');
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,9 +16,9 @@
   --amber-dim: #fdf3e3;
   --blue:      #1565c0;
   --blue-dim:  #e3eeff;
-  --text:      #1a1a18;
-  --text2:     #4a4a42;
-  --muted:     #8a8a7a;
+  --text:      #333;
+  --text2:     #555;
+  --muted:     #666;
   --shadow:    0 2px 12px rgba(0,0,0,0.08);
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
 }
@@ -26,10 +26,11 @@
 html { font-size: 14px; scroll-behavior: smooth; }
 
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  line-height: 1.6;
 }
 
 /* ===== BOUTONS ===== */
@@ -40,11 +41,11 @@ body {
   padding: 8px 16px;
   border-radius: 8px;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
   border: none;
-  font-family: 'Nunito', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 .btn-primary   { background: var(--text); color: #e8c97a; box-shadow: var(--shadow); }
