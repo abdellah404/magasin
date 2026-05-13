@@ -1,4 +1,4 @@
-/* ===== PROGRESS BAR ===== */
+
 .progress {
   background: var(--surface3);
   border-radius: 4px;
@@ -17,7 +17,7 @@
 .progress-green { background: var(--green); }
 .progress-amber { background: var(--amber); }
 
-/* ===== PAYER INFO BOX ===== */
+
 .payer-info {
   background: var(--surface2);
   border: 1px solid var(--border);
@@ -25,7 +25,7 @@
   padding: 14px 16px;
 }
 
-/* ===== SPACING ===== */
+
 .mb-14 { margin-bottom: 14px; }
 .mb-8  { margin-bottom: 8px; }
 .mt-4  { margin-top: 4px; }

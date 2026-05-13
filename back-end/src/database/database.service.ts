@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import * as mysql from 'mysql2/promise';//mariadb ? => 
+import * as mysql from 'mysql2/promise';
 
 @Injectable()
 export class DatabaseService implements OnModuleInit {

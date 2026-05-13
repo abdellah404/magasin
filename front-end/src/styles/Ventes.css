@@ -1,4 +1,4 @@
-/* ===== PANIER LIGNES ===== */
+
 .vente-ligne {
   display: flex;
   gap: 8px;
@@ -30,7 +30,7 @@
 
 .vente-ligne .del-btn:hover { opacity: 0.7; }
 
-/* ===== TOTAL BOX ===== */
+
 .total-box {
   display: flex;
   justify-content: space-between;
@@ -40,7 +40,7 @@
   padding: 12px 16px;
 }
 
-/* ===== MODAL LARGE ===== */
+
 .modal-lg {
   max-width: 640px;
 }

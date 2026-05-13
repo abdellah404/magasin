@@ -30,7 +30,7 @@ function Layout({ children }) {
   return (
     <div className="app">
 
-      {/* ===== SIDEBAR ===== */}
+
       <aside className="sidebar">
 
         <div className="logo">
@@ -88,7 +88,7 @@ function Layout({ children }) {
 
       </aside>
 
-      {/* ===== MAIN ===== */}
+
       <main className="main">
         <header className="topbar">
           <div className="topbar-title">{titles[location.pathname] || 'Dukan'}</div>

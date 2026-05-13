@@ -35,15 +35,13 @@ function Clients() {
   
 
 
-
-
   const ouvrirModal = (client = null) => {
     setEditClient(client)
     setForm(client ? {
       prenom:        client.prenom,
       nom:           client.nom,
       tel:           client.tel           || '',
-      adresse:       client.adresse       || '',
+      adresse:       client.adresse       ||   '',
       limite_credit: client.limite_credit || 0,
     } : { prenom: '', nom: '', tel: '', adresse: '', limite_credit: 0 })
     setError('')
@@ -123,6 +121,11 @@ function Clients() {
         </div>
       </div>
 
+
+
+
+
+
       <div className="card">
         <div className="card-header">
           <div className="card-title">Liste des clients</div>
@@ -182,6 +185,8 @@ function Clients() {
         </div>
       </div>
 
+
+      
       {modalOpen && !editClient && (
         <AjouterClientPopup
           form={form}
@@ -191,7 +196,9 @@ function Clients() {
           enregistrerClient={enregistrerClient}
         />
       )}
+      
 
+      
       {modalOpen && editClient && (
         <ModifierClientPopup
           form={form}
@@ -200,7 +207,8 @@ function Clients() {
           fermerModal={fermerModal}
           enregistrerClient={enregistrerClient}
         />
-      )}
+      )}    
+      
 
     </div>
   )

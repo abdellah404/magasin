@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import AjouterProduitPopup from '../components/produits/AjouterProduitPopup'
-import ModifierProduitPopup from '../components/produits/ModifierProduitPopup'
 import '../styles/Clients.css'
 
 const unites = ['Sac', 'Bidon', 'Boîte', 'Kg', 'Litre', 'Pièce', 'Carton', 'Bouteille']
@@ -101,7 +99,7 @@ function Produits() {
     fetchProduits()
   }
 
-  // KPIs
+
   const totalProduits = produits.length
   const stockBas      = produits.filter(p => p.seuil_alerte > 0 && p.stock <= p.seuil_alerte).length
   const valeurStock   = produits.reduce((s, p) => s + (p.stock * parseFloat(p.prix_unitaire || 0)), 0)
@@ -109,7 +107,7 @@ function Produits() {
   return (
     <div className="page-wrap">
 
-      {/* Header */}
+
       <div className="page-header">
         <div>
           <div className="page-h1"><i className="fas fa-box"></i> Produits & Stock</div>
@@ -120,7 +118,7 @@ function Produits() {
         </button>
       </div>
 
-      {/* KPIs */}
+
       <div className="kpi-grid kpi-3">
         <div className="kpi" style={{ '--kpi-color': '#1a7a4a' }}>
           <div className="kpi-label">Total produits</div>
@@ -142,7 +140,7 @@ function Produits() {
         </div>
       </div>
 
-      {/* Alerte stock bas */}
+
       {stockBas > 0 && (
         <div className="alert alert-amber mb-14">
           <div className="alert-icon"><i className="fas fa-exclamation-triangle"></i></div>
@@ -153,7 +151,7 @@ function Produits() {
         </div>
       )}
 
-      {/* Table */}
+
       <div className="card">
         <div className="card-header">
           <div className="card-title">Liste des produits</div>
@@ -226,29 +224,87 @@ function Produits() {
         </div>
       </div>
 
-      {/* Modal */}
-      {modalOpen && !editProduit && (
-        <AjouterProduitPopup
-          form={form}
-          setForm={setForm}
-          error={error}
-          unites={unites}
-          fournisseurs={fournisseurs}
-          fermerModal={fermerModal}
-          enregistrerProduit={enregistrerProduit}
-        />
-      )}
+      {modalOpen && (
+        <div className="modal-overlay open">
+          <div className="modal">
+            <div className="modal-header">
+              <div className="modal-title">
+                {editProduit
+                  ? <><i className="fas fa-pen"></i> Modifier produit</>
+                  : <><i className="fas fa-box"></i> Nouveau produit</>
+                }
+              </div>
+              <button className="modal-close" onClick={fermerModal}><i className="fas fa-times"></i></button>
+            </div>
+            <div className="modal-body">
 
-      {modalOpen && editProduit && (
-        <ModifierProduitPopup
-          form={form}
-          setForm={setForm}
-          error={error}
-          unites={unites}
-          fournisseurs={fournisseurs}
-          fermerModal={fermerModal}
-          enregistrerProduit={enregistrerProduit}
-        />
+              {error && <div className="auth-error mb-14">{error}</div>}
+
+              <div className="form-group mb-14">
+                <label className="form-label">Nom du produit *</label>
+                <input className="form-input" placeholder="Ex : Farine 25kg"
+                  value={form.nom}
+                  onChange={e => setForm({ ...form, nom: e.target.value })} />
+              </div>
+
+              <div className="form-grid form-grid-3 mb-14">
+                <div className="form-group">
+                  <label className="form-label">Prix (MAD) *</label>
+                  <input className="form-input" type="number" min="0" placeholder="0.00"
+                    value={form.prix_unitaire}
+                    onChange={e => setForm({ ...form, prix_unitaire: e.target.value })} />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Stock</label>
+                  <input className="form-input" type="number" min="0" placeholder="0"
+                    value={form.stock}
+                    onChange={e => setForm({ ...form, stock: e.target.value })} />
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Seuil alerte</label>
+                  <input className="form-input" type="number" min="0" placeholder="0"
+                    value={form.seuil_alerte}
+                    onChange={e => setForm({ ...form, seuil_alerte: e.target.value })} />
+                </div>
+              </div>
+
+              <div className="form-grid form-grid-2 mb-14">
+                <div className="form-group">
+                  <label className="form-label">Unité *</label>
+                  <select className="form-select" value={form.unite}
+                    onChange={e => setForm({ ...form, unite: e.target.value })}>
+                    {unites.map(u => <option key={u}>{u}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Fournisseur</label>
+                  <select className="form-select" value={form.fournisseur_id}
+                    onChange={e => setForm({ ...form, fournisseur_id: e.target.value })}>
+                    <option value="">-- Aucun --</option>
+                    {fournisseurs.map(f => (
+                      <option key={f.id} value={f.id}>{f.nom}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Description (optionnel)</label>
+                <textarea className="form-textarea"
+                  placeholder="Notes sur le produit..."
+                  value={form.description}
+                  onChange={e => setForm({ ...form, description: e.target.value })} />
+              </div>
+
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={fermerModal}>Annuler</button>
+              <button className="btn btn-primary" onClick={enregistrerProduit}>
+                <i className="fas fa-check"></i> Enregistrer
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
     </div>

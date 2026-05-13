@@ -19,7 +19,7 @@ export class VentesService {
   async findAll(authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Récupérer toutes les ventes avec nom client
+
     const ventes = await this.db.query(
       `SELECT v.*,
         CONCAT(c.prenom, ' ', c.nom) as client_nom,
@@ -31,7 +31,7 @@ export class VentesService {
       [userId]
     ) as any[];
 
-    // Pour chaque vente, récupérer ses lignes
+
     for (const vente of ventes) {
       vente.lignes = await this.db.query(
         `SELECT lv.*, p.nom as produit_nom
@@ -48,14 +48,14 @@ export class VentesService {
   async create(body: any, authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // 1. Calculer total + credit + montant_paye
+
     const lignes       = body.lignes || [];
     const total        = lignes.reduce((s: number, l: any) => s + (l.quantite * l.prix_unitaire), 0);
     const mode         = body.mode_paiement;
     const montantPaye  = mode === 'comptant' ? total : mode === 'credit' ? 0 : parseFloat(body.montant_paye) || 0;
     const credit       = Math.max(0, total - montantPaye);
 
-    // 2. Insérer la vente
+
     const result: any = await this.db.query(
       `INSERT INTO ventes (user_id, client_id, date_vente, total, montant_paye, credit, mode_paiement, echeance)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -73,7 +73,7 @@ export class VentesService {
 
     const venteId = result.insertId;
 
-    // 3. Insérer les lignes + décrémenter le stock
+
     for (const ligne of lignes) {
       const sousTotal = ligne.quantite * ligne.prix_unitaire;
 
@@ -83,7 +83,7 @@ export class VentesService {
         [venteId, ligne.produit_id, ligne.quantite, ligne.prix_unitaire, sousTotal]
       );
 
-      // Décrémenter stock du produit
+
       await this.db.query(
         `UPDATE produits SET stock = stock - ? WHERE id = ? AND user_id = ?`,
         [ligne.quantite, ligne.produit_id, userId]
@@ -96,12 +96,12 @@ export class VentesService {
   async delete(id: number, authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Récupérer les lignes pour remettre le stock
+
     const lignes = await this.db.query(
       'SELECT * FROM lignes_vente WHERE vente_id = ?', [id]
     ) as any[];
 
-    // Remettre le stock
+
     for (const ligne of lignes) {
       await this.db.query(
         `UPDATE produits SET stock = stock + ? WHERE id = ? AND user_id = ?`,
@@ -109,7 +109,7 @@ export class VentesService {
       );
     }
 
-    // Supprimer les lignes puis la vente
+
     await this.db.query('DELETE FROM lignes_vente WHERE vente_id = ?', [id]);
     await this.db.query('DELETE FROM ventes WHERE id = ? AND user_id = ?', [id, userId]);
 

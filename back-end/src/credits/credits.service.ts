@@ -5,6 +5,7 @@ import * as jwt from 'jsonwebtoken';
 const SECRET = 'dukan_secret_key_2024';
 
 @Injectable()
+
 export class CreditsService {
 
   constructor(private db: DatabaseService) {}
@@ -19,7 +20,7 @@ export class CreditsService {
   async findAll(authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Crédits clients — ventes avec crédit > 0
+
     const creditsClients = await this.db.query(
       `SELECT v.*,
         CONCAT(c.prenom, ' ', c.nom) as client_nom,
@@ -31,7 +32,7 @@ export class CreditsService {
       [userId]
     );
 
-    // Dettes fournisseurs — livraisons avec crédit > 0
+
     const dettesFourn = await this.db.query(
       `SELECT l.*,
         f.nom as fournisseur_nom,
@@ -47,11 +48,11 @@ export class CreditsService {
     return { creditsClients, dettesFourn };
   }
 
-  // Enregistrer un paiement client
+
   async payerClient(venteId: number, montant: number, authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Récupérer la vente
+
     const ventes = await this.db.query(
       'SELECT * FROM ventes WHERE id = ? AND user_id = ?',
       [venteId, userId]
@@ -61,12 +62,12 @@ export class CreditsService {
 
     const vente = ventes[0];
 
-    // Vérifier que le montant ne dépasse pas le crédit restant
+
     if (montant > vente.credit) {
       return { error: 'Montant supérieur au crédit restant' };
     }
 
-    // Mettre à jour la vente
+
     const nouveauPaye   = parseFloat(vente.montant_paye) + montant;
     const nouveauCredit = Math.max(0, parseFloat(vente.credit) - montant);
 
@@ -78,11 +79,11 @@ export class CreditsService {
     return { message: 'Paiement enregistré ✅' };
   }
 
-  // Enregistrer un paiement fournisseur
+
   async payerFourn(livId: number, montant: number, authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Récupérer la livraison
+
     const livraisons = await this.db.query(
       'SELECT * FROM livraisons WHERE id = ? AND user_id = ?',
       [livId, userId]
@@ -92,12 +93,12 @@ export class CreditsService {
 
     const liv = livraisons[0];
 
-    // Vérifier que le montant ne dépasse pas la dette restante
+
     if (montant > liv.credit) {
       return { error: 'Montant supérieur à la dette restante' };
     }
 
-    // Mettre à jour la livraison
+
     const nouveauPaye   = parseFloat(liv.montant_paye) + montant;
     const nouveauCredit = Math.max(0, parseFloat(liv.credit) - montant);
 

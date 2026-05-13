@@ -1,4 +1,4 @@
-/* ===== AUTH PAGE ===== */
+
 .auth-page {
   min-height: 100vh;
   display: flex;
@@ -75,7 +75,7 @@
 .auth-link:hover { color: #155d3a; }
 .auth-link-text { text-align: center; font-size: 0.82rem; color: var(--muted); }
 
-/* ===== FORM GLOBAL ===== */
+
 .form-grid   { display: grid; gap: 14px; }
 .form-grid-2 { grid-template-columns: 1fr 1fr; }
 .form-grid-3 { grid-template-columns: 1fr 1fr 1fr; }

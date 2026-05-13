@@ -35,12 +35,12 @@ export class LivraisonsService {
   async create(body: any, authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Calcul total et crédit
+
     const total   = body.quantite * body.prix_unitaire;
     const paye    = parseFloat(body.montant_paye) || 0;
     const credit  = Math.max(0, total - paye);
 
-    // Insérer la livraison
+
     await this.db.query(
       `INSERT INTO livraisons (user_id, fournisseur_id, produit_id, date_livraison, quantite, prix_unitaire, total, montant_paye, credit, echeance)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -58,7 +58,7 @@ export class LivraisonsService {
       ]
     );
 
-    // Augmenter le stock du produit
+
     await this.db.query(
       `UPDATE produits SET stock = stock + ? WHERE id = ? AND user_id = ?`,
       [body.quantite, body.produit_id, userId]
@@ -70,7 +70,7 @@ export class LivraisonsService {
   async delete(id: number, authHeader: string) {
     const userId = this.getUserId(authHeader);
 
-    // Récupérer la livraison pour remettre le stock
+
     const livraisons = await this.db.query(
       'SELECT * FROM livraisons WHERE id = ? AND user_id = ?',
       [id, userId]
@@ -79,7 +79,7 @@ export class LivraisonsService {
     if (livraisons.length > 0) {
       const liv = livraisons[0];
 
-      // Décrémenter le stock
+
       await this.db.query(
         `UPDATE produits SET stock = stock - ? WHERE id = ? AND user_id = ?`,
         [liv.quantite, liv.produit_id, userId]

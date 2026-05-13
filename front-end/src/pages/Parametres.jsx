@@ -8,12 +8,12 @@ const villes = [
 
 function Parametres() {
 
-  // ===== DONNÉES =====
+
   const [loading, setLoading] = useState(true)
   const [success, setSuccess] = useState('')
   const [error,   setError]   = useState('')
 
-  // ===== FORMULAIRE INFOS =====
+
   const [form, setForm] = useState({
     prenom:    '',
     nom:       '',
@@ -21,7 +21,7 @@ function Parametres() {
     city:      'Casablanca',
   })
 
-  // ===== FORMULAIRE MOT DE PASSE =====
+
   const [formPwd, setFormPwd] = useState({
     ancien_password:  '',
     nouveau_password: '',
@@ -31,7 +31,7 @@ function Parametres() {
 
   useEffect(() => { fetchParametres() }, [])
 
-  // ===== FETCH =====
+
 
   const fetchParametres = async () => {
     setLoading(true)
@@ -50,7 +50,7 @@ function Parametres() {
     setLoading(false)
   }
 
-  // ===== ENREGISTRER INFOS =====
+
 
   const enregistrerInfos = async () => {
     setError(''); setSuccess('')
@@ -69,7 +69,7 @@ function Parametres() {
         setError(data.error)
       } else {
         setSuccess('Informations mises à jour')
-        // Mettre à jour localStorage
+
         localStorage.setItem('prenom',   form.prenom)
         localStorage.setItem('shopName', form.shop_name)
       }
@@ -78,7 +78,7 @@ function Parametres() {
     }
   }
 
-  // ===== CHANGER MOT DE PASSE =====
+
 
   const changerMotDePasse = async () => {
     setError(''); setSuccess('')
@@ -124,7 +124,7 @@ function Parametres() {
   return (
     <div className="page-wrap">
 
-      {/* ===== HEADER ===== */}
+
       <div className="page-header">
         <div>
           <div className="page-h1"><i className="fas fa-cog"></i> Paramètres</div>
@@ -132,18 +132,18 @@ function Parametres() {
         </div>
       </div>
 
-      {/* ===== MESSAGES ===== */}
+
       {error   && <div className="auth-error mb-14">{error}</div>}
       {success && <div className="auth-success mb-14">{success}</div>}
 
-      {/* ===== SECTION INFOS MAGASIN ===== */}
+
       <div className="card mb-14">
         <div className="card-header">
           <div className="card-title"><i className="fas fa-store"></i> Informations du magasin</div>
         </div>
         <div className="card-body">
 
-          {/* Prénom + Nom */}
+
           <div className="form-grid form-grid-2 mb-14">
             <div className="form-group">
               <label className="form-label">Prénom</label>
@@ -159,7 +159,7 @@ function Parametres() {
             </div>
           </div>
 
-          {/* Nom du magasin */}
+
           <div className="form-group mb-14">
             <label className="form-label">Nom du magasin</label>
             <input className="form-input" placeholder="Ex : Épicerie Al Amal"
@@ -167,7 +167,7 @@ function Parametres() {
               onChange={e => setForm({ ...form, shop_name: e.target.value })} />
           </div>
 
-          {/* Ville */}
+
           <div className="form-group mb-14">
             <label className="form-label">Ville</label>
             <select className="form-select" value={form.city}
@@ -183,7 +183,7 @@ function Parametres() {
         </div>
       </div>
 
-      {/* ===== SECTION MOT DE PASSE ===== */}
+
       <div className="card">
         <div className="card-header">
           <div className="card-title"><i className="fas fa-lock"></i> Changer le mot de passe</div>

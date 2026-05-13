@@ -1,10 +1,10 @@
-/* ===== PAGE ===== */
+
 .home-page {
   min-height: 100vh;
   background: var(--bg);
 }
 
-/* ===== NAVBAR ===== */
+
 .home-navbar {
   display: flex;
   align-items: center;
@@ -61,7 +61,7 @@
   color: var(--white);
 }
 
-/* ===== CONTENU ===== */
+
 .home-content {
   padding: 40px 32px;
 }
@@ -79,7 +79,7 @@
   margin-bottom: 32px;
 }
 
-/* ===== CARTES ===== */
+
 .home-cards {
   display: flex;
   flex-wrap: wrap;

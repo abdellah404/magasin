@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react'
-import AjouterFournisseurPopup from '../components/fournisseurs/AjouterFournisseurPopup'
-import ModifierFournisseurPopup from '../components/fournisseurs/ModifierFournisseurPopup'
 import '../styles/Clients.css'
 
 const villes = [
@@ -82,7 +80,7 @@ function Fournisseurs() {
     fetchFournisseurs()
   }
 
-  // KPIs
+
   const totalFourn = fournisseurs.length
   const totalDette = fournisseurs.reduce((s, f) => s + parseFloat(f.total_dette || 0), 0)
   const fournDette = fournisseurs.filter(f => parseFloat(f.total_dette) > 0).length
@@ -90,7 +88,7 @@ function Fournisseurs() {
   return (
     <div className="page-wrap">
 
-      {/* Header */}
+
       <div className="page-header">
         <div>
           <div className="page-h1"><i className="fas fa-industry"></i> Fournisseurs</div>
@@ -101,7 +99,7 @@ function Fournisseurs() {
         </button>
       </div>
 
-      {/* KPIs */}
+
       <div className="kpi-grid kpi-3">
         <div className="kpi" style={{ '--kpi-color': '#1a7a4a' }}>
           <div className="kpi-label">Total fournisseurs</div>
@@ -123,7 +121,7 @@ function Fournisseurs() {
         </div>
       </div>
 
-      {/* Table */}
+
       <div className="card">
         <div className="card-header">
           <div className="card-title">Liste des fournisseurs</div>
@@ -185,27 +183,71 @@ function Fournisseurs() {
         </div>
       </div>
 
-      {/* Modal */}
-      {modalOpen && !editFourn && (
-        <AjouterFournisseurPopup
-          form={form}
-          setForm={setForm}
-          error={error}
-          villes={villes}
-          fermerModal={fermerModal}
-          enregistrerFourn={enregistrerFourn}
-        />
-      )}
 
-      {modalOpen && editFourn && (
-        <ModifierFournisseurPopup
-          form={form}
-          setForm={setForm}
-          error={error}
-          villes={villes}
-          fermerModal={fermerModal}
-          enregistrerFourn={enregistrerFourn}
-        />
+      {modalOpen && (
+        <div className="modal-overlay open">
+          <div className="modal">
+            <div className="modal-header">
+              <div className="modal-title">
+                {editFourn
+                  ? <><i className="fas fa-pen"></i> Modifier fournisseur</>
+                  : <><i className="fas fa-industry"></i> Nouveau fournisseur</>
+                }
+              </div>
+              <button className="modal-close" onClick={fermerModal}><i className="fas fa-times"></i></button>
+            </div>
+            <div className="modal-body">
+
+              {error && <div className="auth-error mb-14">{error}</div>}
+
+              <div className="form-group mb-14">
+                <label className="form-label">Nom *</label>
+                <input className="form-input" placeholder="Ex : Société Atlas"
+                  value={form.nom}
+                  onChange={e => setForm({ ...form, nom: e.target.value })} />
+              </div>
+
+              <div className="form-grid form-grid-2 mb-14">
+                <div className="form-group">
+                  <label className="form-label">Ville</label>
+                  <select className="form-select" value={form.ville}
+                    onChange={e => setForm({ ...form, ville: e.target.value })}>
+                    {villes.map(v => <option key={v}>{v}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Téléphone</label>
+                  <input className="form-input" placeholder="+212 5XX XXX XXX"
+                    value={form.tel}
+                    onChange={e => setForm({ ...form, tel: e.target.value })} />
+                </div>
+              </div>
+
+              <div className="form-group mb-14">
+                <label className="form-label">Email</label>
+                <input className="form-input" type="email"
+                  placeholder="contact@fournisseur.ma"
+                  value={form.email}
+                  onChange={e => setForm({ ...form, email: e.target.value })} />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Notes (optionnel)</label>
+                <textarea className="form-textarea"
+                  placeholder="Conditions de paiement, délais livraison..."
+                  value={form.notes}
+                  onChange={e => setForm({ ...form, notes: e.target.value })} />
+              </div>
+
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={fermerModal}>Annuler</button>
+              <button className="btn btn-primary" onClick={enregistrerFourn}>
+                <i className="fas fa-check"></i> Enregistrer
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
     </div>

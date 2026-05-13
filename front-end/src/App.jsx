@@ -41,7 +41,7 @@ function App() {
           token ? <Layout><Parametres /></Layout> : <Navigate to="/login" />
         } />
 
-        {/* Redirection par défaut → credits */}
+
         <Route path="*" element={<Navigate to={token ? '/credits' : '/login'} />} />
 
       </Routes>

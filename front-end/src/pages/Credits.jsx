@@ -1,22 +1,19 @@
 import { useState, useEffect } from 'react'
-import PayerClientPopup from '../components/credits/PayerClientPopup'
-import PayerFournisseurPopup from '../components/credits/PayerFournisseurPopup'
+
 import '../styles/Clients.css'
 import '../styles/Credits.css'
 
 function Credits() {
 
-  // ===== DONNÉES =====
+
   const [creditsClients, setCreditsClients] = useState([])
   const [dettesFourn,    setDettesFourn]    = useState([])
   const [loading,        setLoading]        = useState(true)
 
-  // ===== MODAL PAYER CLIENT =====
   const [modalClientOpen, setModalClientOpen] = useState(false)
   const [venteSelectee,   setVenteSelectee]   = useState(null)
   const [montantClient,   setMontantClient]   = useState(0)
 
-  // ===== MODAL PAYER FOURNISSEUR =====
   const [modalFournOpen, setModalFournOpen] = useState(false)
   const [livSelectee,    setLivSelectee]    = useState(null)
   const [montantFourn,   setMontantFourn]   = useState(0)
@@ -25,7 +22,7 @@ function Credits() {
 
   useEffect(() => { fetchCredits() }, [])
 
-  // ===== FETCH =====
+
 
   const fetchCredits = async () => {
     setLoading(true)
@@ -40,7 +37,7 @@ function Credits() {
     setLoading(false)
   }
 
-  // ===== UTILITAIRES =====
+
 
   const jRestants = (date) => {
     if (!date) return null
@@ -49,7 +46,6 @@ function Credits() {
 
   const fmtDate = (d) => d ? new Date(d).toLocaleDateString('fr-MA') : '—'
 
-  // ===== MODAL PAYER CLIENT =====
 
   const ouvrirPayerClient = (vente) => {
     setVenteSelectee(vente)
@@ -68,7 +64,6 @@ function Credits() {
     fetchCredits()
   }
 
-  // ===== MODAL PAYER FOURNISSEUR =====
 
   const ouvrirPayerFourn = (liv) => {
     setLivSelectee(liv)
@@ -87,7 +82,7 @@ function Credits() {
     fetchCredits()
   }
 
-  // ===== BADGE STATUT =====
+
   const badgeStatut = (j) => {
     if (j === null) return <span className="badge badge-blue">En cours</span>
     if (j < 0)      return <span className="badge badge-red"><i className="fas fa-exclamation-circle"></i> Retard</span>
@@ -95,7 +90,7 @@ function Credits() {
     return <span className="badge badge-blue">En cours</span>
   }
 
-  // ===== KPIs =====
+
   const totalARecevoir = creditsClients.reduce((s, v) => s + parseFloat(v.credit || 0), 0)
   const totalAPayer    = dettesFourn.reduce((s, l)   => s + parseFloat(l.credit || 0), 0)
   const balance        = totalARecevoir - totalAPayer
@@ -105,7 +100,6 @@ function Credits() {
   return (
     <div className="page-wrap">
 
-      {/* ===== HEADER ===== */}
       <div className="page-header">
         <div>
           <div className="page-h1"><i className="fas fa-credit-card"></i> Crédits en cours</div>
@@ -113,7 +107,6 @@ function Credits() {
         </div>
       </div>
 
-      {/* ===== KPIs ===== */}
       <div className="kpi-grid kpi-4">
         <div className="kpi" style={{ '--kpi-color': '#1a7a4a' }}>
           <div className="kpi-label">À recevoir</div>
@@ -146,7 +139,6 @@ function Credits() {
         </div>
       </div>
 
-      {/* ===== TABLE CREDITS CLIENTS ===== */}
       <div className="card mb-14">
         <div className="card-header">
           <div className="card-title"><i className="fas fa-users"></i> Créances clients — Montants à recevoir</div>
@@ -225,7 +217,6 @@ function Credits() {
         </div>
       </div>
 
-      {/* ===== TABLE DETTES FOURNISSEURS ===== */}
       <div className="card">
         <div className="card-header">
           <div className="card-title"><i className="fas fa-industry"></i> Dettes fournisseurs — Montants à payer</div>
@@ -303,26 +294,94 @@ function Credits() {
       </div>
 
       {modalClientOpen && venteSelectee && (
-        <PayerClientPopup
-          venteSelectee={venteSelectee}
-          montantClient={montantClient}
-          setMontantClient={setMontantClient}
-          setModalClientOpen={setModalClientOpen}
-          payerClient={payerClient}
-          fmtDate={fmtDate}
-        />
+        <div className="modal-overlay open">
+          <div className="modal" style={{ maxWidth: '400px' }}>
+            <div className="modal-header">
+              <div className="modal-title"><i className="fas fa-credit-card"></i> Paiement client</div>
+              <button className="modal-close" onClick={() => setModalClientOpen(false)}><i className="fas fa-times"></i></button>
+            </div>
+            <div className="modal-body">
+
+              <div className="payer-info mb-14">
+                <div className="fw-bold mb-8">
+                  {venteSelectee.client_nom || 'Client comptoir'}
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted">Restant dû :</span>
+                  <span className="text-red fw-bold">
+                    {parseFloat(venteSelectee.credit).toFixed(2)} MAD
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm mt-4">
+                  <span className="text-muted">Échéance :</span>
+                  <span>{fmtDate(venteSelectee.echeance)}</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Montant reçu (MAD)</label>
+                <input className="form-input" type="number" min="0"
+                  max={venteSelectee.credit}
+                  value={montantClient}
+                  onChange={e => setMontantClient(e.target.value)} />
+              </div>
+
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary"
+                onClick={() => setModalClientOpen(false)}>Annuler</button>
+              <button className="btn btn-green" onClick={payerClient}>
+                <i className="fas fa-check"></i> Enregistrer paiement
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {modalFournOpen && livSelectee && (
-        <PayerFournisseurPopup
-          livSelectee={livSelectee}
-          montantFourn={montantFourn}
-          setMontantFourn={setMontantFourn}
-          setModalFournOpen={setModalFournOpen}
-          payerFourn={payerFourn}
-          fmtDate={fmtDate}
-        />
+        <div className="modal-overlay open">
+          <div className="modal" style={{ maxWidth: '400px' }}>
+            <div className="modal-header">
+              <div className="modal-title"><i className="fas fa-credit-card"></i> Paiement fournisseur</div>
+              <button className="modal-close" onClick={() => setModalFournOpen(false)}><i className="fas fa-times"></i></button>
+            </div>
+            <div className="modal-body">
+
+              <div className="payer-info mb-14">
+                <div className="fw-bold mb-8">{livSelectee.fournisseur_nom}</div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted">Restant dû :</span>
+                  <span className="text-red fw-bold">
+                    {parseFloat(livSelectee.credit).toFixed(2)} MAD
+                  </span>
+                </div>
+                <div className="flex justify-between text-sm mt-4">
+                  <span className="text-muted">Échéance :</span>
+                  <span>{fmtDate(livSelectee.echeance)}</span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Montant payé (MAD)</label>
+                <input className="form-input" type="number" min="0"
+                  max={livSelectee.credit}
+                  value={montantFourn}
+                  onChange={e => setMontantFourn(e.target.value)} />
+              </div>
+
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary"
+                onClick={() => setModalFournOpen(false)}>Annuler</button>
+              <button className="btn btn-green" onClick={payerFourn}>
+                <i className="fas fa-check"></i> Enregistrer paiement
+              </button>
+            </div>
+          </div>
+        </div>
       )}
+
+
 
     </div>
   )

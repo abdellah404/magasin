@@ -23,7 +23,9 @@
   --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
 }
 
+
 html { font-size: 14px; scroll-behavior: smooth; }
+
 
 body {
   font-family: 'Inter', sans-serif;
@@ -33,7 +35,7 @@ body {
   line-height: 1.6;
 }
 
-/* ===== BOUTONS ===== */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -64,7 +66,7 @@ body {
 .btn-xs  { padding: 3px 8px;  font-size: 0.70rem; }
 .w-full  { width: 100%; justify-content: center; }
 
-/* ===== UTILITAIRES ===== */
+
 .flex            { display: flex; }
 .items-center    { align-items: center; }
 .justify-between { justify-content: space-between; }
